@@ -57,7 +57,12 @@ void loop() {
     float irradiance = tension_mv * 5.0; // 1 mv = 5w/m²
     
     // --- 2. MESURE DE LA TENSION (Pont diviseur ratio de 10 avec la vrais valeur) ---
-    int lecture_P = analogRead(A1);  
+    int somme_P = 0;
+    for (int i = 0; i < 10; i++) {
+      somme_P += analogRead(A1);
+      delay(2);
+    }
+    float lecture_P = somme_P / 10.0 ;  
     float tension = (lecture_P * (5.0 / 1023.0)) * 10.0; 
     
     // --- 3. MESURE DU COURANT (Transmetteur JXK7 avec moyenne) ---
@@ -93,7 +98,7 @@ void loop() {
     mqttClient.print(payload);
     mqttClient.endMessage();
 
-    Serial.println("Payload JSON avec envoyé à HiveMQ !\n-----------------------");
+    Serial.println("Payload JSON envoyé à HiveMQ !\n-----------------------");
   }
 }
 
